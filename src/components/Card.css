@@ -1,0 +1,11 @@
+.card {
+    width: 60px;
+    height: 90px;
+    border: 1px solid #000;
+    border-Radius: 8px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-Size: 24px;
+}

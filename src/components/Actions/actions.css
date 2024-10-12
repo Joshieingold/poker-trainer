@@ -1,0 +1,16 @@
+.actions {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 4vw;
+    background: rgb(78, 32, 32);
+}
+.actionBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5rem;
+}

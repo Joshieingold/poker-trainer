@@ -1,0 +1,16 @@
+.navbar {
+    
+    position: fixed;
+    top: 0;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    padding: 0 0;
+    margin: 0 0;
+    height: 10vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.568);
+    font-family: Impact;
+    font-size: 1.5rem;
+    align-items: center;
+}
