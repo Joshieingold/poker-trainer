@@ -116,6 +116,7 @@ const PokerTable = () => {
         setGameState('start');
         setWinner(null);
         setCurrentBet(0);
+        
         setPot(0);
         setPlayerContribution(0);
         setOpponentContribution(0);
@@ -224,7 +225,7 @@ const PokerTable = () => {
                     </div>
                 )}
                 <div className='player1Container'>
-                    <p className='playerName'>Opponent</p>
+                    <p className='playerName'>Tekoa | {opponentStack}$ |</p>
                     {areOpponentCardsVisible ? (
                         <Hand cards={opponentHand} />
                     ) : (
@@ -236,27 +237,21 @@ const PokerTable = () => {
                 </div>
 
                 <div className='player2Container'>
-                    <p className='playerName'>Your Hand</p>
-                    <Hand cards={playerHand} />
+                    <p className='playerName'>Your Hand | {playerStack}$ |</p>
+                    <div className='cardContainer'><Hand cards={playerHand} /></div>
                 </div>
 
                 <div className='communityCardsContainer'>
                     <Hand cards={communityCards} />
                 </div>
-
-                <Actions
-                    onCheck={handleCheck}
-                    onRaise={handleRaise}
-                    onFold={handleFold}
-                    playerStack={playerStack}
-                    opponentStack={opponentStack}
-                    currentBet={currentBet}
-                />
-            </div>
-
-            <div className='potContainer'>
+                <div className='potContainer'>
                 <p>POT: {pot}</p>
             </div>
+
+
+            </div>
+
+
             <div className='gameControls'>
                 {['pre-flop', 'flop', 'turn', 'river'].includes(gameState) && (
                     <Actions

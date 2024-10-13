@@ -67,19 +67,32 @@
 }
 
 .player1Container {
+    display: flex;
+    justify-content: top;
+    align-items: center;
     top: 12vh;
     left: 12vw;
+    min-width: 15%;
+    max-width: 15%;
+    max-height: 40%;
 }
 
 .player2Container {
+    display: flex;
+    justify-content: top;
+    align-items: center;
     bottom: 12vh;
     right: 12vw;
+    min-width: 15%;
+    max-width: 15%;
+    max-height: 40%;
 }
 
 .playerName {
     font-size: large;
     font-weight: 500;
-    width: 100%;  
+    width: 100%;
+    height: 1%
 }
 
 .communityCardsContainer {
@@ -123,6 +136,7 @@
     transition: background-color 0.3s; 
 }
 .cardBack {
+    margin-top: 15%;
     width: 47px;
     height: 73px; 
     background-color: red; 
@@ -154,4 +168,10 @@
     background-color: #4CAF50; 
     color: white; 
     transition: background-color 0.3s; 
+}
+.potContainer {
+    position: fixed;
+    bottom: 35%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: larger;
 }
