@@ -139,3 +139,19 @@
     display: flex;
     gap: 3px; 
 }
+
+.newHandBtn {
+    position: absolute;
+    top: 85.5%;
+    right: 41.5%;
+
+    cursor: pointer;
+    margin: 0.5rem; 
+    padding: 0.5rem 1rem; 
+    font-size: 1rem; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #4CAF50; 
+    color: white; 
+    transition: background-color 0.3s; 
+}

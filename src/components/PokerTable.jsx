@@ -46,6 +46,7 @@ const PokerTable = () => {
         setPlayerHand(newDeck.slice(0, 2)); // Player gets first 2 cards
         setOpponentHand(newDeck.slice(2, 4)); // Opponent gets next 2 cards
         setDeck(newDeck.slice(4)); // Update the deck
+        setOpponentCardsVisible(false);
         setGameState('pre-flop');
     };
 
@@ -76,6 +77,7 @@ const PokerTable = () => {
         const result = compareHands(playerFullHand, opponentFullHand); // Evaluate the best hands
         console.log(playerFullHand, opponentFullHand);
         setWinner(result); // Set the winner based on comparison
+        setOpponentCardsVisible(true);
         setGameState('showdown');
     };
 
@@ -132,7 +134,7 @@ const PokerTable = () => {
                 )}
                 {gameState === 'folded' && (
                     <div className='folded'>
-                        <button onClick={handleRestart} className='button'>
+                        <button onClick={handleRestart} className='newHandBtn'>
                             New Hand
                         </button>
                     </div>
