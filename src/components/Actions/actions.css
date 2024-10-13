@@ -1,18 +1,19 @@
 .actions {
-    position: fixed;
-    bottom: 0;
+    position: absolute;
+    
+    bottom: 0vh;
     display: flex;
-    justify-content: center;
+    justify-content:space-evenly;
     align-items: center;
     width: 100vw;
-    height: 4vw;
+    height: 6vw;
     background: rgb(78, 32, 32);
 }
 .foldBtn, .checkBtn, .raiseBtn {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 5rem;
+    
 }
 .foldBtn:hover {
     border-color: rgba(255, 0, 0, 0.459);

@@ -13,7 +13,7 @@ const Hand = ({ cards, title }) => {
     </div>
   );
 };
-
+// This is to control how card containers are managed
 const styles = {
   hand: {
     display: 'flex',

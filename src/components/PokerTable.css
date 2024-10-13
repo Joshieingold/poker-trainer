@@ -21,24 +21,36 @@
     overflow: hidden;
 }
 
-/* Displays the GameState Updating container for the button */
+
 .gameControls {
-    position: absolute;
-    top: 1vh; 
-    left: 50%;
-    transform: translateX(-50%); /* Only way I can find to center it */
-    text-align: center;
-    z-index: 10; /* On top of board */
+    display: flex;
+    justify-content: space-around; 
+    padding: 10px; 
+
+    color: white; 
+    z-index: 100; 
 }
 
 .gameState {
-    font-size: 1.5rem;
+    font-size: 2rem; 
     font-weight: bold;
-    margin-bottom: 0.5rem;
+    color: white; 
+    position: absolute; 
+    top: 5%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
 }
 
 .button {
     cursor: pointer;
+    margin: 0.5rem; 
+    padding: 0.5rem 1rem; 
+    font-size: 1rem; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #4CAF50; 
+    color: white; 
+    transition: background-color 0.3s;
 }
 
 .player1Container, .player2Container {
@@ -78,4 +90,52 @@
 
     padding: 1rem;
     border-radius: 1rem;
+}
+.showdownResultContainer {
+    position: absolute;
+    top: 20%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+
+    padding: 1rem; 
+
+    z-index: 200; 
+}
+.gameState {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgba(255, 255, 255, 0.753);
+}
+.winnerText {
+    margin-top: 25%;
+    margin-bottom: 0;
+}
+.dealCardsBtn {
+    position: absolute;
+    bottom: 5%;
+    cursor: pointer;
+    margin: 0.5rem; 
+    padding: 0.5rem 1rem; 
+    font-size: 1rem; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #4CAF50; 
+    color: white; 
+    transition: background-color 0.3s; 
+}
+.cardBack {
+    width: 47px;
+    height: 73px; 
+    background-color: red; 
+    border: 2px solid white; 
+    border-radius: 5px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; 
+
+}
+
+.cardBacks {
+    display: flex;
+    gap: 3px; 
 }
