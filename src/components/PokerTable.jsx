@@ -5,7 +5,7 @@ import Hand from './Hand.jsx';
 import './PokerTable.css';
 
 const suits = ['♠', '♣', '♥', '♦'];
-const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+const values = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
 
 // Generates all possible cards.
 const createDeck = () => {
