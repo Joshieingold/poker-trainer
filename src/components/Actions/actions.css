@@ -8,9 +8,17 @@
     height: 4vw;
     background: rgb(78, 32, 32);
 }
-.actionBtn {
+.foldBtn, .checkBtn, .raiseBtn {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: 5rem;
+}
+.foldBtn:hover {
+    border-color: rgba(255, 0, 0, 0.459);
+    transition: 0.5s;
+}
+.raiseBtn:hover {
+    border-color: rgba(60, 255, 0, 0.459);
+    transition: 0.5s;
 }

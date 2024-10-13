@@ -1,19 +1,81 @@
 .gameArea {
     width: 100vw;
-    height:78vh;
+    height: 78vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-
-}
-.table {
-    display: flex;  
     text-align: center;
     background: rgb(2, 95, 44);
     height: 60vh;
     width: 80vw;
-    justify-content: center;
-    align-items: center;
     border-radius: 12rem;
     border: 5px solid rgba(0, 0, 0, 0.336);
-    }
+    overflow: hidden;
+}
+
+/* Displays the GameState Updating container for the button */
+.gameControls {
+    position: absolute;
+    top: 1vh; 
+    left: 50%;
+    transform: translateX(-50%); /* Only way I can find to center it */
+    text-align: center;
+    z-index: 10; /* On top of board */
+}
+
+.gameState {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.button {
+    cursor: pointer;
+}
+
+.player1Container, .player2Container {
+    position: absolute;
+    height: 10rem;
+    width: 7rem;
+    background-color: rgba(0, 0, 0, 0.788);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 100;
+}
+
+.player1Container {
+    top: 12vh;
+    left: 12vw;
+}
+
+.player2Container {
+    bottom: 12vh;
+    right: 12vw;
+}
+
+.playerName {
+    font-size: large;
+    font-weight: 500;
+    width: 100%;  
+}
+
+.communityCardsContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 1rem;
+    border-radius: 1rem;
+}

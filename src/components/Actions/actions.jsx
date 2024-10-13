@@ -1,13 +1,17 @@
-// src/components/ActionButtons.jsx
+// Currently does nothing.. Not even super sure how to make it do something.
+
 import React from 'react';
 import "./actions.css";
 
 
-const Actions = () => (
+const Actions =  ({onRestart}) => {
+  return (
   <div className="actions">
-    <button className='actionBtn'>Fold</button>
-    <button className='actionBtn'>Check</button>
-    <button className='actionBtn'>Raise</button>
+    <button onClick={onRestart}className='foldBtn'>Fold</button>
+    <button className='checkBtn'>Check</button>
+    <button className='raiseBtn'>Raise</button>
   </div>
 );
+}
+
 export default Actions;
