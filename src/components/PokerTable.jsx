@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { compareHands } from '../utils/handEvaluator.jsx'; // Updated path if necessary
 import Actions from './Actions/actions.jsx'; // Import the Actions component
+import CorrectPercentBar from './CorrectPercentBar/correctpercentbar.jsx';
 import Hand from './Hand.jsx';
 import './PokerTable.css';
 // Data for making every card
@@ -236,6 +237,9 @@ const PokerTable = () => {
     
     return (
         <div className='gameArea'>
+            <div className='PercentBar'>
+                <CorrectPercentBar />
+            </div>
             <div className='table'>
                 {gameState !== 'start' && <h2 className='gameState'>{gameState.toUpperCase()}</h2>}
                 {gameState === 'start' && (
