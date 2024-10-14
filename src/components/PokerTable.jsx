@@ -279,32 +279,9 @@ const PokerTable = () => {
                         </button>
                     </div>
                 )}
-                <div className='player1Container'>
-                    <p className='playerName'>Tekoa | {opponentStack / bbAmount}BB |</p>
-                    {areOpponentCardsVisible ? (
-                        <Hand cards={opponentHand} />
-                    ) : (
-                        <div className='cardBacks'>
-                            <div className='cardBack'></div>
-                            <div className='cardBack'></div>
-                        </div>
-                    )}
-                    {isOpponentBB ? (
-                        <p className="position">BB</p>)
-                    : (
-                        <p className="position">SB</p>
-                    )}
-                </div>
 
-                <div className='player2Container'>
-                    <p className='playerName'>Your Hand | {playerStack / bbAmount}BB |</p>
-                    <div className='cardContainer'><Hand cards={playerHand} /></div>
-                    {isPlayerBigBlind ? (
-                        <p className="position">BB</p>)
-                    : (
-                        <p className="position">SB</p>
-                    )}
-                </div>
+
+
 
                 <div className='communityCardsContainer'>
                     <Hand cards={communityCards} />
@@ -315,7 +292,41 @@ const PokerTable = () => {
 
 
             </div>
+            <div className="playerContainers">
+                <div className='player1Container'>
+                        <p className='playerName'>Tekoa | {opponentStack / bbAmount}BB |</p>
+                        <div className='cardContainer'>
+                            {areOpponentCardsVisible ? (
+                                <Hand cards={opponentHand} />
+                            ) : (
+                                <div className='cardBacks'>
+                                    <div className='cardBack'></div>
+                                    <div className='cardBack'></div>
+                                </div>
+                            )}
+                        </div>
+                        <div className='positionContainer'>
+                            {isOpponentBB ? (
+                                    <p className="position">Big Blind</p>)
+                                : (
+                                    <p className="position">Small Blind</p>
+                                )}
+                        </div>
 
+                </div>
+                <div className='player2Container'>
+                        <p className='playerName'>Your Hand | {playerStack / bbAmount}BB |</p>
+                        <div className='cardContainer'><Hand cards={playerHand} /></div>
+                        <div className='positionContainer'>
+                            {isPlayerBigBlind ? (
+                                <p className="position">Big Blind</p>)
+                            : (
+                                <p className="position">Small Blind</p>
+                            )}
+                        </div>
+
+                </div>
+            </div>
 
             <div className='gameControls'>
                 {['pre-flop', 'flop', 'turn', 'river', 'folded'].includes(gameState) && (

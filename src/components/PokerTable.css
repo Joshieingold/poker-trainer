@@ -53,47 +53,10 @@
     transition: background-color 0.3s;
 }
 
-.player1Container, .player2Container {
-    position: absolute;
-    height: 10rem;
-    width: 7rem;
-    background-color: rgba(0, 0, 0, 0.788);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    z-index: 100;
-}
 
-.player1Container {
-    display: flex;
-    justify-content: top;
-    align-items: center;
-    top: 12vh;
-    left: 12vw;
-    min-width: 15%;
-    max-width: 15%;
-    max-height: 40%;
-}
 
-.player2Container {
-    display: flex;
-    justify-content: top;
-    align-items: center;
-    bottom: 12vh;
-    right: 12vw;
-    min-width: 15%;
-    max-width: 15%;
-    max-height: 40%;
-}
 
-.playerName {
-    font-size: large;
-    font-weight: 500;
-    width: 100%;
-    height: 1%
-}
+
 
 .communityCardsContainer {
     position: absolute;
@@ -137,21 +100,26 @@
 }
 .cardBack {
     margin-top: 15%;
-    width: 47px;
-    height: 73px; 
+    width: 48px;
+    height: 68px; 
     background-color: red; 
     border: 2px solid white; 
-    border-radius: 5px; 
+    border-radius: 8px; 
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white; 
 
 }
 
 .cardBacks {
     display: flex;
-    gap: 3px; 
+    gap: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+
 }
 
 .newHandBtn {
@@ -175,9 +143,88 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: larger;
 }
-.position {
-    background: rgba(255, 0, 0, 0.616);
+
+.playerContainers {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .player1Container {
+    top: 12vh;
+    left: 12vw;
+  }
+
+  .player2Container {
+    bottom: 12vh;
+    right: 12vw;
+  }
+  .player1Container, .player2Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 15vw; /* Adjust the width to make it more rectangular */
+    height: 22vh;
+    background-color: #00000086;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: absolute; /* Allows positionContainer to overlap cards */
+  }
+  
+  .playerName {
+    display: flex;
+    position: absolute;
+    top: 0; /* Moves the position halfway */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #000000;
+    height: 25%;
     width: 100%;
-    border-radius: 20px;
-    border: 2px solid  rgba(255, 255, 255, 0.678);
-}
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+
+  
+  .cardContainer {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 46%; /* Moves the position halfway */
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+  }
+  
+ 
+
+  
+  .positionContainer {
+    display: flex;
+    position: absolute;
+    top: 92%; /* Moves the position halfway */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #000000;
+    height: 15%;
+    width: 100%;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .position {
+    display: flex;
+    color: #ffffff;
+    text-align: center;
+
+  }
+  
