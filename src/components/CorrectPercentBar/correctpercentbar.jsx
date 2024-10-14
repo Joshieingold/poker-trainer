@@ -7,7 +7,7 @@ export const CorrectPercentBar = () => {
         <div className="container">
         <div className="progressBar">
             <div className="progressBarFill" style={({width: `${correctPercent}%`})}>
-            <div className="progressLabel">{correctPercent}</div>
+            <div className="progressLabel">{correctPercent}%</div>
             </div>
             
         </div>
