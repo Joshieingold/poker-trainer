@@ -45,6 +45,8 @@ const PokerTable = () => {
     const [playerContribution, setPlayerContribution] = useState(0); // Used for finding the amount towards the pot contributed.
     const [opponentContribution, setOpponentContribution] = useState(0); // Used for finding the amount towards the pot contributed.
     const [hasRaised, setHasRaised] = useState(false); // Is used to move the game state forward after raise check.
+    const [isStackZero, setCanCheckorRaise] = useState(false);
+    const [isOpponentBB, setIsOpponentBB] = useState(false);
     //Shuffle the deck on site load.
     useEffect(() => {
         setDeck(shuffleDeck(createDeck()));
@@ -71,6 +73,7 @@ const PokerTable = () => {
             setPot(bbAmount + sbAmount);
             setCurrentBet(bbAmount);
         } else {
+            setIsOpponentBB(true);
             setOpponentStack((prev) => prev - bbAmount);
             setOpponentContribution(bbAmount);
             setPlayerStack((prev) => prev - sbAmount);
@@ -139,6 +142,7 @@ const PokerTable = () => {
         setPlayerContribution(0); 
         setOpponentContribution(0); 
         setIsPlayerBigBlind((prev) => !prev);
+        setIsOpponentBB((prev) => !prev);
         setHasRaised(false);
     };
     
@@ -150,26 +154,40 @@ const PokerTable = () => {
 
     const handleCheck = () => {
         let remainingToMatch; // Set variable to find what a check would be equal to.
-
+    
         if (isPlayerBigBlind) {
             // Opponent needs to match player's bet
             remainingToMatch = currentBet - opponentContribution;
             if (remainingToMatch > 0) {
-                setOpponentStack((prev) => prev - remainingToMatch);
-                setOpponentContribution((prev) => prev + remainingToMatch);
-                setPot((prev) => prev + remainingToMatch);
+                if (opponentStack >= remainingToMatch) {
+                    setOpponentStack((prev) => prev - remainingToMatch);
+                    setOpponentContribution((prev) => prev + remainingToMatch);
+                    setPot((prev) => prev + remainingToMatch);
+                } else {
+                    // Opponent goes all-in
+                    setPot((prev) => prev + opponentStack);
+                    setOpponentContribution((prev) => prev + opponentStack);
+                    setOpponentStack(0); // Opponent is now out of chips
+                }
             }
         } else {
             // Player needs to match opponent's bet
             remainingToMatch = currentBet - playerContribution;
             if (remainingToMatch > 0) {
-                setPlayerStack((prev) => prev - remainingToMatch);
-                setPlayerContribution((prev) => prev + remainingToMatch);
-                setPot((prev) => prev + remainingToMatch);
+                if (playerStack >= remainingToMatch) {
+                    setPlayerStack((prev) => prev - remainingToMatch);
+                    setPlayerContribution((prev) => prev + remainingToMatch);
+                    setPot((prev) => prev + remainingToMatch);
+                } else {
+                    // Player goes all-in
+                    setPot((prev) => prev + playerStack);
+                    setPlayerContribution((prev) => prev + playerStack);
+                    setPlayerStack(0); // Player is now out of chips
+                }
             }
         }
-
-        // Advance to next round from whatever round your in after bet is matched.
+    
+        // Advance the game state after the bet is matched
         if (gameState === 'pre-flop') {
             revealFlop();
         } else if (gameState === 'flop') {
@@ -178,22 +196,9 @@ const PokerTable = () => {
             revealRiver();
         } else if (gameState === 'river') {
             handleShowdown();
-        } 
-        // if someone folds then it will do handlefold. 
-        if (gameState === 'folded') {
-            handleFold()
         }
-
-        // Check if any player is out of chips aftershowdown.
-        if (gameState==="showdown") {
-            if (playerStack <= 0) {
-                setGameState('playerLost');
-            } else if (opponentStack <= 0) {
-                setGameState('opponentLost');
-            }
-        }
-        // Want to make the gamestate for lost positions to allow reset Game button.
     };
+    
 
     const handleRaise = () => {
         const raiseAmount = currentBet + 10;
@@ -280,11 +285,21 @@ const PokerTable = () => {
                             <div className='cardBack'></div>
                         </div>
                     )}
+                    {isOpponentBB ? (
+                        <p className="position">BB</p>)
+                    : (
+                        <p className="position">SB</p>
+                    )}
                 </div>
 
                 <div className='player2Container'>
-                    <p className='playerName'>Your Hand | {playerStack / bbAmount}BB | {isPlayerBigBlind}</p>
+                    <p className='playerName'>Your Hand | {playerStack / bbAmount}BB |</p>
                     <div className='cardContainer'><Hand cards={playerHand} /></div>
+                    {isPlayerBigBlind ? (
+                        <p className="position">BB</p>)
+                    : (
+                        <p className="position">SB</p>
+                    )}
                 </div>
 
                 <div className='communityCardsContainer'>

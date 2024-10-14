@@ -175,3 +175,9 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: larger;
 }
+.position {
+    background: rgba(255, 0, 0, 0.616);
+    width: 100%;
+    border-radius: 20px;
+    border: 2px solid  rgba(255, 255, 255, 0.678);
+}
