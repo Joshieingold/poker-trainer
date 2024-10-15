@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { compareHands } from '../utils/handEvaluator.jsx'; // Updated path if necessary
 import Actions from './Actions/actions.jsx'; // Import the Actions component
-import CorrectPercentBar from './CorrectPercentBar/correctpercentbar.jsx';
 import Hand from './Hand.jsx';
 import './PokerTable.css';
+
 // Data for making every card
 const suits = ['♠', '♣', '♥', '♦'];
 const values = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
 // These are the amounts for the Big blind and Small blind
 const bbAmount = 10;
 const sbAmount = 5;
-
-
-
-
+const correctCalls = [];
 // Creates deck by making one of evey card for every suit
-
-
 const createDeck = () => {
     const deck = [];
     for (let suit of suits) {
@@ -35,8 +30,10 @@ const shuffleDeck = (deck) => {
     return deck;
 };
 
+// The main Game Loop is stored here.
 const PokerTable = () => {
     // Global Variables
+    const [correctPercent, setCorrectPercent] = useState(0);
     const [deck, setDeck] = useState([]); // Gets the shuffled deck.
     const [playerHand, setPlayerHand] = useState([]); // Creates empty Player hand
     const [opponentHand, setOpponentHand] = useState([]); // Creates empty Opponent hand.
@@ -45,22 +42,36 @@ const PokerTable = () => {
     const [winner, setWinner] = useState(null); // Winner for after showdown or fold to determine who gets the pot.
     const [currentBet, setCurrentBet] = useState(0); // Variable to find the amount of chips required to check from the pot.
     const [pot, setPot] = useState(0); // The pot.
-    const [playerStack, setPlayerStack] = useState(100); // Starting chips for player
-    const [opponentStack, setOpponentStack] = useState(100); // Starting chips for opponent
+    const [playerStack, setPlayerStack] = useState(1000); // Starting chips for player
+    const [opponentStack, setOpponentStack] = useState(1000); // Starting chips for opponent
     const [isPlayerBigBlind, setIsPlayerBigBlind] = useState(true); // Alternate BB/SB
     const [areOpponentCardsVisible, setOpponentCardsVisible] = useState(false); // variable which allows me to set the opponents cards as unseen until the round is over.
     const [playerContribution, setPlayerContribution] = useState(0); // Used for finding the amount towards the pot contributed.
     const [opponentContribution, setOpponentContribution] = useState(0); // Used for finding the amount towards the pot contributed.
     const [hasRaised, setHasRaised] = useState(false); // Is used to move the game state forward after raise check.
-    const [isStackZero, setCanCheckorRaise] = useState(false);
     const [isOpponentBB, setIsOpponentBB] = useState(false);
-    const [isRightChoice, setRightChoice] = useState([])
+
+
+// FOR SITE PREP // 
+    const findPercentCorrect = (correctCalls) => {
+        if (correctCalls.length === 0) {
+            return 100
+        } else {
+            let numCorrect = correctCalls.filter(item => item === "Correct").length;
+            let total = correctCalls.length;
+            return Math.round((numCorrect / total) * 100)
+        };
+
+    };
+
+
     //Shuffle the deck on site load.
     useEffect(() => {
         setDeck(shuffleDeck(createDeck()));
+        setCorrectPercent(findPercentCorrect(correctCalls));
     }, []);
 
-
+    // These are the ranges for the pre-flop we are using.
     const range_charts = {
         SB: {
             raise: [
@@ -79,6 +90,11 @@ const PokerTable = () => {
             "A9o",],
         }
     };
+
+
+// FOR EVALUATING  //
+
+    // Checks if the players hand for what the correct pre-flop action was given their hand.
     const evaluateSBAction = (playerHand) => {
         if (range_charts.SB.raise.includes(convertHandFormat(playerHand))) {
             return 'Raise';
@@ -88,7 +104,8 @@ const PokerTable = () => {
             return 'Fold';
         }
     };
-    const cardRanking = {
+    // The card values regardless of letters for ease of formatting
+    const cardValue = {
         '2': 2,
         '3': 3,
         '4': 4,
@@ -97,21 +114,22 @@ const PokerTable = () => {
         '7': 7,
         '8': 8,
         '9': 9,
-        'T': 10, // Ten is higher than 9
-        'J': 11, // Jack is higher than 10
-        'Q': 12, // Queen is higher than Jack
-        'K': 13, // King is higher than Queen
-        'A': 14  // Ace is the highest
+        'T': 10, 
+        'J': 11, 
+        'Q': 12, 
+        'K': 13, 
+        'A': 14  
     };
+    // Formats the cards in hand into pre-flop chart format.
     const convertHandFormat = (hand) => {
         // Extract rank and suit for both cards
-        const card1 = hand[0].value + hand[0].suit; // e.g. "3h"
-        const card2 = hand[1].value + hand[1].suit; // e.g. "4d"
+        const card1 = hand[0].value + hand[0].suit;
+        const card2 = hand[1].value + hand[1].suit;
     
-        const rank1 = card1[0]; // First card rank
-        const suit1 = card1[1]; // First card suit
-        const rank2 = card2[0]; // Second card rank
-        const suit2 = card2[1]; // Second card suit
+        const rank1 = card1[0]; 
+        const suit1 = card1[1]; 
+        const rank2 = card2[0];
+        const suit2 = card2[1];
     
         // Check if it's a pocket pair (both ranks are the same)
         if (rank1 === rank2) {
@@ -121,30 +139,28 @@ const PokerTable = () => {
         // Check if the hand is suited or offsuit
         const suited = suit1 === suit2 ? 's' : 'o';
     
-        // Determine which card has a higher rank using the cardRanking
-        const card1RankValue = cardRanking[rank1];
-        const card2RankValue = cardRanking[rank2];
+        // Determine which card has a higher value using the card value
+        const card1RankValue = cardValue[rank1];
+        const card2RankValue = cardValue[rank2];
     
         // Compare the ranks correctly to return the higher ranked card first
         if (card1RankValue > card2RankValue) {
-            return `${rank1}${rank2}${suited}`; // rank1 is higher, format as "AQ" or "T9"
+            return `${rank1}${rank2}${suited}`;
         } else {
-            return `${rank2}${rank1}${suited}`; // rank2 is higher, format as "QA" or "9T"
+            return `${rank2}${rank1}${suited}`;
         }
     };
     
+    // Finds correct action for the most recent hand and displays it in console. For now.
     const handlePlayerMove = (playerHand, isBigBlind) => {
         if (!isBigBlind) {
-            // Evaluate the move based on the ranges if the player is SB
             const action = evaluateSBAction(playerHand);
-            console.log(`Recommended action for ${convertHandFormat(playerHand)}: ${action}`);
+            return (`${action}`); // Just logs for now but I want it to display or update things somehow
         } else {
-            console.log(`Player is Big Blind. No evaluation needed.`);
+            return (`Check`); // Just logs for now but I want it to display or update things somehow
         }
     };
     
-
-
     // Gives each player cards from the deck while removing them from the deck so as not to have duplicates.
     const dealHands = () => {
         const newDeck = [...deck];
@@ -178,6 +194,9 @@ const PokerTable = () => {
         
     };
 
+// FOR GAME STATES //
+
+    // Goes from pre-flop to flop and flips the top 3 cards of the deck.
     const revealFlop = () => { 
         handlePlayerMove(playerHand, isPlayerBigBlind)
         const newDeck = [...deck]; // Uses the deck we were using still not allowing for duplicates.
@@ -187,7 +206,7 @@ const PokerTable = () => {
         
         
     };
-
+    // Goes from pre-flop to flop and flips the top 3 cards of the deck.
     const revealTurn = () => {
         const newDeck = [...deck];
         setCommunityCards((prev) => [...prev, newDeck[0]]);
@@ -195,14 +214,12 @@ const PokerTable = () => {
         setGameState('turn');
         console.log(convertHandFormat(playerHand))
     };
-
     const revealRiver = () => {
         const newDeck = [...deck];
         setCommunityCards((prev) => [...prev, newDeck[0]]);
         setDeck(newDeck.slice(1));
         setGameState('river');
     };
-
     const handleShowdown = () => {
         const playerFullHand = [...playerHand, ...communityCards]; // Combines players hand with the community cards.
         const opponentFullHand = [...opponentHand, ...communityCards]; // combines the opponents hand with the community cards. 
@@ -226,7 +243,6 @@ const PokerTable = () => {
         setOpponentCardsVisible(true); // Shows the opponents cards to the player at showdown.
         setGameState('showdown'); 
     };
-
     const handleRestart = () => {
         // Resets all things except for chips and switches button position.
         const newDeck = shuffleDeck(createDeck()); // Creates a new deck
@@ -244,17 +260,42 @@ const PokerTable = () => {
         setIsOpponentBB((prev) => !prev);
         setHasRaised(false);
     };
-    
+
+
+// FOR ACTIONS //
     const handleFold = () => {
+        const action = handlePlayerMove(playerHand, isPlayerBigBlind)
+        
+        if (gameState=="pre-flop") {
+            if (action == "Fold") {
+                correctCalls.push("Correct");
+                setCorrectPercent(findPercentCorrect(correctCalls));
+                console.log("You were right! You should fold!")
+            } else {
+                correctCalls.push("Wrong");
+                setCorrectPercent(findPercentCorrect(correctCalls));
+                console.log(`You were Wrong! you should ${action}`)
+            }
+        }
         setGameState('folded');
         setOpponentStack((prev) => prev + pot); // For now only you can fold so the opponent gets the pot if you fold.
         setPot(0)
-        handlePlayerMove(playerHand, isPlayerBigBlind)
     };
-
     const handleCheck = () => {
+        const action = handlePlayerMove(playerHand, isPlayerBigBlind)
+        console.log(correctCalls)
+        if (gameState=="pre-flop") {
+            if (action == "Check") {
+                correctCalls.push("Correct");
+                setCorrectPercent(findPercentCorrect(correctCalls));
+                console.log("You were right! You should Check!")
+            } else {
+                correctCalls.push("Wrong");
+                setCorrectPercent(findPercentCorrect(correctCalls));
+                console.log(`You were Wrong! you should ${action}`)
+            }
+        }
         let remainingToMatch; // Set variable to find what a check would be equal to.
-    
         if (isPlayerBigBlind) {
             // Opponent needs to match player's bet
             remainingToMatch = currentBet - opponentContribution;
@@ -298,9 +339,22 @@ const PokerTable = () => {
             handleShowdown();
         }
     };
-    
-
     const handleRaise = () => {
+        const action = handlePlayerMove(playerHand, isPlayerBigBlind)
+        if (gameState=="pre-flop") {
+            if (action == "Raise") {
+                correctCalls.push("Correct");
+                setCorrectPercent(findPercentCorrect(correctCalls));
+                console.log("You were right! You should Raise!");
+            } else {
+                correctCalls.push("Wrong")
+                setCorrectPercent(findPercentCorrect(correctCalls));
+                console.log(`You were Wrong! you should ${action}` );
+            }
+        }
+        
+        
+        
         const raiseAmount = currentBet + 10;
         setCurrentBet(raiseAmount);
         setHasRaised(true);
@@ -333,14 +387,25 @@ const PokerTable = () => {
             setGameState('opponentLost');
         }
     }};
-    
+
+
+// HTML BASED ON GAMESTATE // 
     return (
         <div className='gameArea'>
             <div className='PercentBar'>
-                <CorrectPercentBar />
+            <div className="container">
+                <div className="progressBar">
+                    <div className="progressBarFill" style={({width: `${correctPercent}%`})}>
+                        <div className="progressLabel">{correctPercent}%</div>
+                    </div>
+            
+                </div>
+
+            </div>
             </div>
             <div className='table'>
-                {gameState !== 'start' && <h2 className='gameState'>{gameState.toUpperCase()}</h2>}
+                {gameState !== 'start' && 
+                <h2 className='gameState'>{gameState.toUpperCase()}</h2>}
                 {gameState === 'start' && (
                     <button onClick={dealHands} className='dealCardsBtn'>
                         Deal Cards
