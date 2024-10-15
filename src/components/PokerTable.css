@@ -228,8 +228,8 @@
 
   }
   
-  .container {
-
+  .bar-container {
+    text-align: center;
     width: 35vw;
 
 }

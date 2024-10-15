@@ -393,7 +393,8 @@ const PokerTable = () => {
     return (
         <div className='gameArea'>
             <div className='PercentBar'>
-            <div className="container">
+            <div className="bar-container">
+                <h3>Correct Pre-Flop Assessments</h3>
                 <div className="progressBar">
                     <div className="progressBarFill" style={({width: `${correctPercent}%`})}>
                         <div className="progressLabel">{correctPercent}%</div>
