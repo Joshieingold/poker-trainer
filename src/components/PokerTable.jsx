@@ -98,7 +98,7 @@ const PokerTable = () => {
     const evaluateSBAction = (playerHand) => {
         if (range_charts.SB.raise.includes(convertHandFormat(playerHand))) {
             return 'Raise';
-        } else if (range_charts.SB.check.includes(playerHand)) {
+        } else if (range_charts.SB.check.includes(convertHandFormat(playerHand))) {
             return 'Check';  // Limp and Check are treated the same here.
         } else {
             return 'Fold';
