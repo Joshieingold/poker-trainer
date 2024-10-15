@@ -10,7 +10,13 @@ const values = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
 // These are the amounts for the Big blind and Small blind
 const bbAmount = 10;
 const sbAmount = 5;
+
+
+
+
 // Creates deck by making one of evey card for every suit
+
+
 const createDeck = () => {
     const deck = [];
     for (let suit of suits) {
@@ -48,10 +54,96 @@ const PokerTable = () => {
     const [hasRaised, setHasRaised] = useState(false); // Is used to move the game state forward after raise check.
     const [isStackZero, setCanCheckorRaise] = useState(false);
     const [isOpponentBB, setIsOpponentBB] = useState(false);
+    const [isRightChoice, setRightChoice] = useState([])
     //Shuffle the deck on site load.
     useEffect(() => {
         setDeck(shuffleDeck(createDeck()));
     }, []);
+
+
+    const range_charts = {
+        SB: {
+            raise: [
+            "AKs", "AQs", "AJs", "ATs",
+            "KQs", "KJs",
+            "AQo", "KQo", "QQ", "QJs",
+            "AJo", "KJo", "JJ",
+            "ATo", "TT", "99", "88",
+            "J4s", "J3s", "J2s", "T5s", "T4s", "95s", "94s", "85s", "84s", "74s",
+            "J6o", "T6o", "96o", "86o", "63s", "Q5o", "53s", "Q4o", "43s", "K3o", "Q3o", "K2o", "Q2o"
+        ],
+        check: ["AA", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
+            "AKo", "KK", "KTs", "K9s", "K8s", "K7s", "K6s", "K5s", "K4s", "K3s", "K2s",
+            "QTs", "Q9s", "Q8s", "Q7s", "Q6s", "Q5s", "Q4s", "Q3s", "Q2s",
+            "QJo", "JTs", "J9s", "J8s", "J7s", "KTo", "QTo", "JTo", "T9s", "T8s", "T7s", "T6s",
+            "A9o",],
+        }
+    };
+    const evaluateSBAction = (playerHand) => {
+        if (range_charts.SB.raise.includes(convertHandFormat(playerHand))) {
+            return 'Raise';
+        } else if (range_charts.SB.check.includes(playerHand)) {
+            return 'Check';  // Limp and Check are treated the same here.
+        } else {
+            return 'Fold';
+        }
+    };
+    const cardRanking = {
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5,
+        '6': 6,
+        '7': 7,
+        '8': 8,
+        '9': 9,
+        'T': 10, // Ten is higher than 9
+        'J': 11, // Jack is higher than 10
+        'Q': 12, // Queen is higher than Jack
+        'K': 13, // King is higher than Queen
+        'A': 14  // Ace is the highest
+    };
+    const convertHandFormat = (hand) => {
+        // Extract rank and suit for both cards
+        const card1 = hand[0].value + hand[0].suit; // e.g. "3h"
+        const card2 = hand[1].value + hand[1].suit; // e.g. "4d"
+    
+        const rank1 = card1[0]; // First card rank
+        const suit1 = card1[1]; // First card suit
+        const rank2 = card2[0]; // Second card rank
+        const suit2 = card2[1]; // Second card suit
+    
+        // Check if it's a pocket pair (both ranks are the same)
+        if (rank1 === rank2) {
+            return `${rank1}${rank2}`; // Return pocket pair without "o" or "s"
+        }
+    
+        // Check if the hand is suited or offsuit
+        const suited = suit1 === suit2 ? 's' : 'o';
+    
+        // Determine which card has a higher rank using the cardRanking
+        const card1RankValue = cardRanking[rank1];
+        const card2RankValue = cardRanking[rank2];
+    
+        // Compare the ranks correctly to return the higher ranked card first
+        if (card1RankValue > card2RankValue) {
+            return `${rank1}${rank2}${suited}`; // rank1 is higher, format as "AQ" or "T9"
+        } else {
+            return `${rank2}${rank1}${suited}`; // rank2 is higher, format as "QA" or "9T"
+        }
+    };
+    
+    const handlePlayerMove = (playerHand, isBigBlind) => {
+        if (!isBigBlind) {
+            // Evaluate the move based on the ranges if the player is SB
+            const action = evaluateSBAction(playerHand);
+            console.log(`Recommended action for ${convertHandFormat(playerHand)}: ${action}`);
+        } else {
+            console.log(`Player is Big Blind. No evaluation needed.`);
+        }
+    };
+    
+
 
     // Gives each player cards from the deck while removing them from the deck so as not to have duplicates.
     const dealHands = () => {
@@ -62,6 +154,7 @@ const PokerTable = () => {
         setOpponentCardsVisible(false);
         setGameState('pre-flop');
         placeBlinds();
+        
     };
 
     // Sets blinds into the pot depending on player position. WILL NEED TO BE UPDATED TO ACCOMODATE MORE PLAYERS AS RN ITS JUST A T/F
@@ -82,13 +175,17 @@ const PokerTable = () => {
             setPot(bbAmount + sbAmount);
             setCurrentBet(bbAmount);
         }
+        
     };
 
     const revealFlop = () => { 
+        handlePlayerMove(playerHand, isPlayerBigBlind)
         const newDeck = [...deck]; // Uses the deck we were using still not allowing for duplicates.
         setCommunityCards(newDeck.slice(0, 3));
         setDeck(newDeck.slice(3));
         setGameState('flop'); // Changes the game state for updates.
+        
+        
     };
 
     const revealTurn = () => {
@@ -96,6 +193,7 @@ const PokerTable = () => {
         setCommunityCards((prev) => [...prev, newDeck[0]]);
         setDeck(newDeck.slice(1));
         setGameState('turn');
+        console.log(convertHandFormat(playerHand))
     };
 
     const revealRiver = () => {
@@ -151,6 +249,7 @@ const PokerTable = () => {
         setGameState('folded');
         setOpponentStack((prev) => prev + pot); // For now only you can fold so the opponent gets the pot if you fold.
         setPot(0)
+        handlePlayerMove(playerHand, isPlayerBigBlind)
     };
 
     const handleCheck = () => {
