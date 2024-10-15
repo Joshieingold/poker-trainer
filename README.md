@@ -6,10 +6,10 @@
     <li>Easy to use UI. </li>
     <li>Responsive on any desktop sizing.</li>
     <li>Can evaluate your poker hands correctly to determine the winner.</li>
+    <li> The game keeps track of your plays throughout the pre-flop and compare them to range chart.</li>
   </ul>
 <h2>Future Implementations</h2>
   <ul>
-    <li>Will keep track of your plays throughout the game and compare them to range chart.</li>
     <li>Will have a page dedicated to your session stats and preflop charts being used.</li>
     <li>Mobile Friendly setup</li>
   </ul>
